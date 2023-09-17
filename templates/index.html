@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta http-equiv="refresh" content="180"> <!--3분마다 새로고침 -->
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <title>EODIYEO</title>
+        <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+        <!-- Font Awesome icons (free version)-->
+        <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+        <!-- DataTables CSS -->
+        <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
+        <!-- DataTables JS -->
+        <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>
+        <!-- Google fonts-->
+        <link href="https://fonts.googleapis.com/css?family=Varela+Round" rel="stylesheet" />
+        <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet" />
+        <!-- Core theme CSS (includes Bootstrap)-->
+        <link href="{{ url_for('static', filename='css/styles.css') }}" rel="stylesheet">
+            <style>
+        body {
+            overflow-y: hidden;
+        }
+    </style>
+
+    </head>
+
+
+
+
+<!-- Arrivals and Departures Section with Background Image -->
+<section class="departures-section">
+    <div class="flights-section" style="background-color : black; background-size: cover; background-repeat: no-repeat; background-position: center center;">
+    <div style="font-size: 12px; color: #555;">업데이트 시간(UTC): {{ current_time }}</div>
+
+        <!-- arrival Information -->
+        <div id="arrivals-section" style="text-align: center; padding-top: 20px;">
+            <div class="container">
+                <div class="d-flex justify-content-center">
+                    <div class="text-center text-center-transparent-bg">
+                    {% if flight_type == 'D' %}
+                     <img src="{{ url_for('static', filename='assets/img/arrival.png') }}" width="30" style="background-color: transparent;" >   Arrivals(도착)
+                    {% elif flight_type == 'I' %}
+                     <img src="{{ url_for('static', filename='assets/img/arrival.png') }}" width="30" style="background-color: transparent;" >   Arrivals(도착)
+                    {% endif %}
+                    </div>
+                </div>
+
+                <div style="text-align: right;">
+                </div>
+
+
+                <div class="table">
+                        <table id="arrivals-table" class="table-responsive" style="width:100%; color: white;" data-layout="squish">
+                        <thead style="color: black;">
+                            <tr>
+                            <th>항공사</th>
+                            <th>편명</th>
+                            <th>출발지</th>
+                            <!--  <th>시 간</th> -->
+                            <th>시간</th> <!-- 변경된 시간-->
+                            <th>GATE</th>
+                            <th>상태</th>
+                            <!-- <th>FLYING</th> -->
+                            <!-- <th>FLYING2</th> -->
+                            <!-- <th>departure_time</th> -->
+                            <!-- <th>arrival_time</th> -->
+                            </tr>
+                        </thead>
+                        <tbody id="arrivals-body">
+                            {% for flight in arrivals %}
+                                    <td>{{ flight.airlineKorean }}</td>
+                                <td style="position: relative; text-align: left;">
+                                        <img src="{{ url_for('static', filename='assets/img/' + AIRLINE_LOGOS.get(flight.airFln[:2], 'default_logo.png')) }}" alt="{{ flight.airlineKorean }}" width="25">
+                                    {% if flight.flying2 == "비행 중" %}
+                                    {{ flight.airFln }}
+                                    <a href="{{ flight.flight_link }}" target="_blank">
+                                        <img src="{{ url_for('static', filename='assets/img/flying2.png') }}" alt="Flying" width="45" style="cursor: pointer;">
+                                    </a>
+                                    {% else %}
+                                    {{ flight.airFln }}
+                                    {% endif %}
+                        </td>
+                        {% if flight_type == 'D' %}
+                            <td>{{ flight.boardingKor }}</td>
+                        {% elif flight_type == 'I' %}
+                            <td>{{ flight.boardingKor }}</td>
+                        {% endif %}
+                            <!-- <td>{{ flight.std }}</td> -->
+                            <td>{{ flight.etd if flight.etd else flight.std }}</td>
+                            <td>{{ flight.gate }}</td>
+                            <td>{{ flight.rmkKor }}</td>
+                            <!-- <td>{{ flight.flying }} </td> -->
+                            <!-- <td>{{ flight.flying2 }}</td> -->
+                            <!-- <td>{{ flight.actualRunwayDeparture }}</td> -->
+                            <!-- <td>{{ flight.actualRunwayArrival }}</td> -->
+                    </tr>
+                    {% endfor %}
+                </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+
+
+
+<!-- Departures Information -->
+        <div id="departures-section" style="text-align: center;">
+            <div class="container">
+                <div class="d-flex justify-content-center">
+                    <div class="text-center text-center-transparent-bg">
+                    {% if flight_type == 'D' %}
+                     <img src="{{ url_for('static', filename='assets/img/departure.png') }}" width="30" style="background-color: transparent;" >   Departures(출발)
+                    {% elif flight_type == 'I' %}
+                     <img src="{{ url_for('static', filename='assets/img/departure.png') }}" width="30" style="background-color: transparent;" >   Departures(출발)
+                    {% endif %}
+                    </div>
+                </div>
+                <p></p><p></p><p></p>
+                <div class="table">
+                <table id="departures-table" class="table-responsive" style="width:100%; color: white; margin-bottom: 50px;" data-layout="squish">
+                        <thead style="color: black;">
+                            <tr>
+                                <th>항공사</th>
+                                <th>편명</th>
+                                <th>목적지</th>
+                                <!-- <th>시 간</th> -->
+                                <th>시간</th> <!-- 변경된 시간-->
+                                <th>GATE</th>
+                                <th>상태</th>
+                               <!-- <th>FLYING</th> -->
+                               <!-- <th>FLYING2</th> -->
+                               <!-- <th>departure_time</th> -->
+                               <!--  <th>arrival_time</th> -->
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for flight in departures %}
+                    <tr id="departure-flight-{{ loop.index }}">
+                            <td>{{ flight.airlineKorean }}</td>
+                                <td style="position: relative; text-align: left;">
+                                        <img src="{{ url_for('static', filename='assets/img/' + AIRLINE_LOGOS.get(flight.airFln[:2], 'default_logo.png')) }}" alt="{{ flight.airlineKorean }}" width="25">
+                                {% if flight.flying2 == "비행 중" %}
+                                    {{ flight.airFln }}
+                                <a href="{{ flight.flight_link }}" target="_blank">
+                                    <img src="{{ url_for('static', filename='assets/img/flying2.png') }}" alt="Flying" width="45" style="cursor: pointer;">
+                                </a>
+                                {% else %}
+                                    {{ flight.airFln }}
+                                {% endif %}
+                        </td>
+                            {% if flight_type == 'D' %}
+                                <td>{{ flight.arrivedKor }}</td>
+                            {% elif flight_type == 'I' %}
+                                 <td>{{ flight.arrivedKor }}</td>
+                            {% endif %}
+                            <!--  <td>{{ flight.std }}</td> -->
+                            <td>{{ flight.etd if flight.etd else flight.std }}</td>
+                            <td>{{ flight.gate }}</td>
+                            <td>{{ flight.rmkKor }}</td>
+                            <!-- <td>{{ flight.flying }}</td> -->
+                            <!-- <td>{{ flight.flying2 }}</td> -->
+                            <!-- <td>{{ flight.actualRunwayDeparture }}</td> -->
+                            <!-- <td>{{ flight.actualRunwayArrival }}</td> -->
+                    </tr>
+                    {% endfor %}
+                        </tbody>
+                </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+</section>
+
+
+
+    </body>
+</html>
