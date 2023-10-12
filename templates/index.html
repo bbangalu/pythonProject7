@@ -146,9 +146,9 @@
                                         <img src="{{ url_for('static', filename='assets/img/' + AIRLINE_LOGOS.get(flight.airFln[:2], 'default_logo.png')) }}" alt="{{ flight.airlineKorean }}" width="25">
                                 {% if flight.flying2 == "비행 중" %}
                                     {{ flight.airFln }}
-                                <a href="{{ flight.flight_link }}" target="_blank">
-                                    <img src="{{ url_for('static', filename='assets/img/flying2.png') }}" alt="Flying" width="45" style="cursor: pointer;">
-                                </a>
+                               <a href="{{ flight.flight_link }}" target="_blank">
+                                        <img src="{{ url_for('static', filename='assets/img/flying2.png') }}" alt="Flying" width="45" style="cursor: pointer;">
+                                    </a>
                                 {% else %}
                                     {{ flight.airFln }}
                                 {% endif %}
